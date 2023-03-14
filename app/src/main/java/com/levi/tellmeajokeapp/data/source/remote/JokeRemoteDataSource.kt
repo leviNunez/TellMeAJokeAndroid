@@ -7,7 +7,7 @@ import com.levi.tellmeajokeapp.data.Result.Success
 import com.levi.tellmeajokeapp.data.Result.Error
 import com.levi.tellmeajokeapp.data.source.JokeDataSource
 
-class RemoteDataSource(private val api: JokeApi) : JokeDataSource {
+class JokeRemoteDataSource(private val api: JokeApi) : JokeDataSource {
 
     override suspend fun getJoke(): Result<Joke> {
         return try {
