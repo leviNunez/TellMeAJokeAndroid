@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="joke"
+            type="com.levi.tellmeajokeapp.data.Joke" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/blue_500"
+        tools:context=".ui.main.MainFragment">
+
+        <TextView
+            android:id="@+id/setup"
+            style="@style/jokeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{joke.setup}"
+            app:layout_constraintBottom_toTopOf="@id/image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="What did the ocean say to the beach?" />
+
+        <TextView
+            android:id="@+id/punchline"
+            style="@style/jokeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{joke.punchline}"
+            app:layout_constraintBottom_toTopOf="@id/image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="Thanks for all the sediment." />
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="@dimen/image_size"
+            android:layout_height="@dimen/image_size"
+            android:layout_marginTop="64dp"
+            android:src="@drawable/ic_question"
+            app:layout_constraintBottom_toTopOf="@id/next_joke_container"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/setup" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/next_joke_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_large"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/image">
+
+            <TextView
+                android:id="@+id/next_joke_text"
+                style="@style/nextJoke"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Tell me another one" />
+
+            <ImageView
+                android:id="@+id/next_joke_image"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/spacing_normal"
+                android:src="@drawable/ic_forward" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
