@@ -34,7 +34,7 @@ internal class JokeRepositoryImplTest {
     }
 
     @Test
-    fun getJoke_requestsJokeFromRemoteDataSource() = runTest {
+    fun `getJoke requests a joke from the remote data source`() = runTest {
         // WHEN: a joke is requested from the joke repository
         val joke = jokeRepository.getJoke() as Success
 

@@ -1,8 +1,8 @@
-package com.levi.tellmeajokeapp.data
+package com.levi.tellmeajokeapp.data.source.remote
 
+import com.levi.tellmeajokeapp.data.Joke
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.create
 import retrofit2.http.GET
 
 const val BASE_URL = "https://official-joke-api.appspot.com"
@@ -21,4 +21,3 @@ object RetrofitInstance {
             .create(JokeApi::class.java)
     }
 }
-
