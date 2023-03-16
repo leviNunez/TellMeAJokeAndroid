@@ -1,12 +1,12 @@
 package com.levi.tellmeajokeapp.ui.main
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.levi.tellmeajokeapp.R
+import androidx.fragment.app.viewModels
+import com.levi.tellmeajokeapp.databinding.FragmentJokeBinding
 
 class JokeFragment : Fragment() {
 
@@ -14,19 +14,19 @@ class JokeFragment : Fragment() {
         fun newInstance() = JokeFragment()
     }
 
-    private lateinit var viewModel: JokeViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(JokeViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
+    private val viewModel: JokeViewModel by viewModels { JokeViewModel.Factory }
+    private lateinit var binding: FragmentJokeBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_joke, container, false)
+        binding = FragmentJokeBinding.inflate(layoutInflater, container, false).apply {
+            viewmodel = viewmodel
+            lifecycleOwner = viewLifecycleOwner
+        }
+
+        return binding.root
     }
 
 }
