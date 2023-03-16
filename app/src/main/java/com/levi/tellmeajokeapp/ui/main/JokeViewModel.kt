@@ -1,7 +1,12 @@
 package com.levi.tellmeajokeapp.ui.main
 
+import android.text.Editable.Factory
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
+import com.levi.tellmeajokeapp.JokeApplication
 import com.levi.tellmeajokeapp.data.Joke
 import com.levi.tellmeajokeapp.data.source.JokeRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,4 +44,21 @@ class JokeViewModel(private val jokeRepository: JokeRepository) : ViewModel() {
         val joke: Joke? = null,
     )
 
+    companion object {
+
+        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel> create(
+                modelClass: Class<T>,
+                extras: CreationExtras
+            ): T {
+                val application = checkNotNull(extras[APPLICATION_KEY])
+
+                return JokeViewModel(
+                    jokeRepository = (application as JokeApplication).appContainer.jokeRepository
+                ) as T
+            }
+        }
+
+    }
 }
