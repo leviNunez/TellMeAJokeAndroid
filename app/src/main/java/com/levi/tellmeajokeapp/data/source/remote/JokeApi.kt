@@ -11,13 +11,3 @@ interface JokeApi {
     @GET("random_joke")
     fun getRandomJoke(): Joke
 }
-
-object RetrofitInstance {
-    val api: JokeApi by lazy {
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create())
-            .build()
-            .create(JokeApi::class.java)
-    }
-}

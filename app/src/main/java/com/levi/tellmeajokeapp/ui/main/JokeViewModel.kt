@@ -1,10 +1,7 @@
 package com.levi.tellmeajokeapp.ui.main
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.CreationExtras
 import com.levi.tellmeajokeapp.data.Joke
 import com.levi.tellmeajokeapp.data.source.JokeRepository
 import kotlinx.coroutines.flow.MutableStateFlow
