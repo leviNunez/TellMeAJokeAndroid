@@ -1,13 +1,11 @@
-package com.levi.tellmeajokeapp.ui.main
+package com.levi.tellmeajokeapp.ui.joke
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
 import com.levi.tellmeajokeapp.MainCoroutineRule
 import com.levi.tellmeajokeapp.data.Joke
-import com.levi.tellmeajokeapp.data.source.FakeJokeRepository
-import kotlinx.coroutines.CompletableDeferred
+import com.levi.tellmeajokeapp.data.source.FakeTestJokeRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -23,11 +21,11 @@ internal class JokeViewModelTest {
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule(dispatcher = UnconfinedTestDispatcher())
 
-    private lateinit var jokeRepository: FakeJokeRepository
+    private lateinit var jokeRepository: FakeTestJokeRepository
 
     @Before
     fun setupRepository() {
-        jokeRepository = FakeJokeRepository()
+        jokeRepository = FakeTestJokeRepository()
         val joke = Joke(
             type = "general",
             setup = "What did the ocean say to the beach?",
@@ -44,7 +42,7 @@ internal class JokeViewModelTest {
         val viewModel = JokeViewModel(jokeRepository)
 
         // WHEN: refreshJoke is called
-        viewModel.refreshJoke()
+        viewModel.next()
 
         // THEN: Verify that the ui is in the correct state
         assertThat(viewModel.uiState.value.joke).isNotNull()
@@ -59,7 +57,7 @@ internal class JokeViewModelTest {
         val viewModel = JokeViewModel(jokeRepository)
 
         // WHEN: refreshJoke is called
-        viewModel.refreshJoke()
+        viewModel.next()
 
         // THEN: Verify that the ui is in the correct state
         assertThat(viewModel.uiState.value.errorMessage).isNotNull()
