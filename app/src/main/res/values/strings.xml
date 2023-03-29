@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TellMeAJokeApp</string>
+    <string name="app_name">Tell Me A Joke</string>
     <string name="next_button_text">Next</string>
     <string name="previous_button_text">Back</string>
     <string name="question_mark_image_description">Question mark image that reveals the punchline</string>
