@@ -1,11 +1,12 @@
 package com.levi.tellmeajokeapp.data
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-
+@JsonClass(generateAdapter = true)
 data class Joke(
-    @field:Json(name = "id") val id: Int,
-    @field:Json(name = "punchline") val punchline: String,
-    @field:Json(name = "setup") val setup: String,
-    @field:Json(name = "type") val type: String
+    @Json(name = "id") val id: Int,
+    @Json(name = "punchline") val punchline: String,
+    @Json(name = "setup") val setup: String,
+    @Json(name = "type") val type: String
 )

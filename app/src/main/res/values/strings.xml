@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">TellMeAJokeApp</string>
+    <string name="next_button_text">Next</string>
+    <string name="previous_button_text">Back</string>
+    <string name="question_mark_image_description">Question mark image that reveals the punchline</string>
+    <string name="big_laughing_emoji">Big laughing emoji</string>
+    <string name="question_mark_button_text">\?</string>
+    <string name="previous_joke_button_description">Previous joke button</string>
+    <string name="next_joke_button_description">Next joke button</string>
+    <string name="retry_button_description">Retry button</string>
+    <string name="error_message_text">Oops! Something really bad \njust happened.</string>
+    <string name="loading_text">Loading fast…</string>
 </resources>

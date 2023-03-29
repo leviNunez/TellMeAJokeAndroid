@@ -2,7 +2,7 @@ package com.levi.tellmeajokeapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.levi.tellmeajokeapp.ui.main.JokeFragment
+import com.levi.tellmeajokeapp.ui.joke.JokeFragment
 
 class MainActivity : AppCompatActivity() {
 

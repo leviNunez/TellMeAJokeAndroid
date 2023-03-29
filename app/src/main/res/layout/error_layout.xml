@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:showIn="@layout/fragment_joke">
+
+        <FrameLayout
+            android:id="@+id/error_message_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/spacing_normal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/error_image"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:src="@drawable/ic_explosion" />
+
+            <TextView
+                android:id="@+id/error_text"
+                style="@style/errorTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/sricha_font_family"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:text="@string/error_message_text"
+                 />
+        </FrameLayout>
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/retry_button"
+            android:layout_width="@dimen/default_button_size"
+            android:layout_height="@dimen/default_button_size"
+            android:background="@drawable/retry_button"
+            android:contentDescription="@string/retry_button_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/error_message_container" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
