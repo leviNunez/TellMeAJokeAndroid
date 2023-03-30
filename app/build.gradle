@@ -53,8 +53,8 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4'
 
-    // Dynamic animation
-    implementation("androidx.dynamicanimation:dynamicanimation: 1.0.0")
+    // Splash screen
+    implementation "androidx.core:core-splashscreen:1.0.0"
 
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'

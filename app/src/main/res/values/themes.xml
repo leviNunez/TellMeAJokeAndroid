@@ -12,7 +12,13 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <item name="android:background">?attr/colorPrimaryVariant</item>
+        <item name="android:windowBackground">?attr/colorPrimaryVariant</item>
+    </style>
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/blue_700</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="postSplashScreenTheme">@style/Theme.TellMeAJokeApp</item>
     </style>
 
     <style name="jokeTextStyle">
