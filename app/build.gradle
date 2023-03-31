@@ -4,6 +4,14 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('/Users/levinunez/Documents/PROGRAMMING/Android/Keys/Key0')
+            storePassword 'aOW4*oXuca04'
+            keyAlias 'key0'
+            keyPassword 'aOW4*oXuca04'
+        }
+    }
     namespace 'com.levi.tellmeajokeapp'
     compileSdk 33
 
@@ -15,6 +23,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.release
     }
 
     buildTypes {
