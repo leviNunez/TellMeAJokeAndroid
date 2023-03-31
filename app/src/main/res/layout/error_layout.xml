@@ -31,22 +31,37 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:ellipsize="end"
                 android:fontFamily="@font/sricha_font_family"
                 android:maxLines="2"
-                android:ellipsize="end"
-                android:text="@string/error_message_text"
-                 />
+                android:text="@string/error_message_text" />
         </FrameLayout>
 
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/retry_button"
-            android:layout_width="@dimen/default_button_size"
-            android:layout_height="@dimen/default_button_size"
-            android:background="@drawable/retry_button"
-            android:contentDescription="@string/retry_button_description"
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/retry_button_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/error_message_container" />
+            app:layout_constraintTop_toBottomOf="@id/error_message_container">
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/retry_button"
+                android:layout_width="@dimen/default_button_size"
+                android:layout_height="@dimen/default_button_size"
+                android:background="@drawable/retry_button"
+                android:contentDescription="@string/retry_button_description" />
+
+            <TextView
+                android:id="@+id/next_button_text"
+                style="@style/buttonTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:text="@string/retry_button_text" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
