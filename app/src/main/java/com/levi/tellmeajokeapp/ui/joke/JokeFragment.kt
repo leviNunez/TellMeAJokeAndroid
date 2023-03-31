@@ -10,6 +10,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.levi.tellmeajokeapp.databinding.FragmentJokeBinding
+import com.levi.tellmeajokeapp.util.fadeViewIn
+import com.levi.tellmeajokeapp.util.fadeViewOut
+import com.levi.tellmeajokeapp.util.scaleViewUpAndDown
+import com.levi.tellmeajokeapp.util.translateAndRotateView
 import kotlinx.coroutines.*
 
 
@@ -133,16 +137,15 @@ class JokeFragment : Fragment() {
     }
 
     private fun startPunchlineAnimation() {
-        val delay = 500L
         binding.apply {
-            scaleViewUpAndDown(view = jokeContainer)
+            scaleViewUpAndDown(view = jokeContainer, animDuration = 600L)
             fadeViewOut(view = setupText)
             fadeViewOut(view = questionMarkButton)
-            fadeViewIn(view = punchlineText, animDelay = delay)
-            fadeViewIn(view = laughImage, animDelay = delay)
-            scaleViewUpAndDown(view = laughImage, repeat = 3, animDelay = delay)
-            fadeViewOut(view = laughImage, animDelay = delay * 4)
-            fadeViewIn(view = backNextButtonsRl, animDelay = delay * 5)
+            fadeViewIn(view = punchlineText, animDuration = 1000L, animDelay = 500L)
+            fadeViewIn(view = laughImage, animDelay = 700L)
+            scaleViewUpAndDown(view = laughImage, repeat = 3, animDelay = 700L)
+            fadeViewOut(view = laughImage, animDelay = 2300L)
+            fadeViewIn(view = backNextButtonsRl, animDelay = 2700L)
         }
     }
 
