@@ -13,7 +13,7 @@ fun fadeViewIn(view: View, animDuration: Long = 500, animDelay: Long = 0) {
     val fader = ObjectAnimator.ofFloat(view, View.ALPHA, 1f).apply {
         startDelay = animDelay
         duration = animDuration
-//        interpolator = AccelerateDecelerateInterpolator()
+        interpolator = AccelerateDecelerateInterpolator()
         addListener(object : AnimatorListenerAdapter() {
 
             override fun onAnimationStart(animation: Animator) {
