@@ -5,8 +5,8 @@
     <string name="question_mark_button_description">Reveal punchline</string>
     <string name="laugh_emoji">A laugh emoji</string>
     <string name="question_mark_button_text">\?</string>
-    <string name="back_joke_button_description">Back</string>
-    <string name="next_joke_button_description">Next joke</string>
+    <string name="back_button_description">Back</string>
+    <string name="next_button_description">Next joke</string>
     <string name="retry_button_description">Retry</string>
     <string name="error_message_text">Oops… I think something \nwent wrong.</string>
     <string name="loading_text">Loading fast…</string>

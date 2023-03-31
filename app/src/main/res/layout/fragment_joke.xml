@@ -124,7 +124,7 @@
                         android:layout_width="@dimen/default_button_size"
                         android:layout_height="@dimen/default_button_size"
                         android:background="@drawable/next_button"
-                        android:contentDescription="@string/next_joke_button_description" />
+                        android:contentDescription="@string/next_button_description" />
 
                     <TextView
                         android:id="@+id/next_button_text"
