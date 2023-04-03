@@ -1,19 +1,19 @@
 package com.levi.tellmeajokeapp.ui.joke
 
+import android.animation.*
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.AccelerateInterpolator
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.levi.tellmeajokeapp.databinding.FragmentJokeBinding
-import com.levi.tellmeajokeapp.util.fadeViewIn
-import com.levi.tellmeajokeapp.util.fadeViewOut
-import com.levi.tellmeajokeapp.util.scaleViewUpAndDown
-import com.levi.tellmeajokeapp.util.translateAndRotateView
+import com.levi.tellmeajokeapp.util.*
 import kotlinx.coroutines.*
 
 
@@ -44,6 +44,11 @@ class JokeFragment : Fragment() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(IS_PUNCHLINE_VISIBLE_KEY, isPunchlineVisible)
     }
 
     private fun hideSetupAndShowPunchline() {
@@ -92,6 +97,7 @@ class JokeFragment : Fragment() {
                         when (uiAction) {
                             UiActions.Next -> {
                                 isPunchlineVisible = false
+                                hidePunchlineAndShowSetup()
                                 startSetupAnimation()
                             }
                             UiActions.RevealPunchline -> {
@@ -110,43 +116,46 @@ class JokeFragment : Fragment() {
     }
 
     private fun startAnimationLoop() {
-        val animationInterval = 5000L
         cancelAnimationLoop()
         animationJob = viewLifecycleOwner.lifecycleScope.launch {
             while (true) {
-                delay(animationInterval)
-                translateAndRotateView(
-                    view = binding.controlButtonsContainer,
-                    animDuration = 400
-                )
+                delay(5000)
+                binding.apply {
+                    val containerH = mainLayout.height
+                    val translateValue = (containerH / 10).toFloat()
+                    val translator =
+                        ObjectAnimator.ofFloat(
+                            controlButtonsContainer,
+                            View.TRANSLATION_Y,
+                            -translateValue
+                        ).apply {
+                            duration = 400
+                            repeatMode = ObjectAnimator.REVERSE
+                            repeatCount = 1
+                            interpolator = AccelerateInterpolator(1f)
+                        }
+
+                    val rotator =
+                        ObjectAnimator.ofFloat(controlButtonsContainer, View.ROTATION, -360f, 0f)
+                            .apply {
+                                startDelay = 100
+                                duration = 400
+                                interpolator = AccelerateInterpolator(1f)
+                            }
+
+                    val set = AnimatorSet().apply {
+                        playTogether(translator, rotator)
+                        disableViewDuringAnimation(questionMarkButton)
+                    }
+
+                    set.start()
+                }
             }
         }
     }
 
     private fun cancelAnimationLoop() {
         animationJob?.cancel()
-    }
-
-    private fun startSetupAnimation() {
-        binding.apply {
-            punchlineText.visibility = View.GONE
-            backNextButtonsRl.visibility = View.GONE
-            fadeViewIn(view = setupText, animDuration = 1000)
-            fadeViewIn(view = questionMarkButton, animDuration = 1000)
-        }
-    }
-
-    private fun startPunchlineAnimation() {
-        binding.apply {
-            scaleViewUpAndDown(view = jokeContainer, animDuration = 600L)
-            fadeViewOut(view = setupText)
-            fadeViewOut(view = questionMarkButton)
-            fadeViewIn(view = punchlineText, animDuration = 1000L, animDelay = 500L)
-            fadeViewIn(view = laughImage, animDelay = 700L)
-            scaleViewUpAndDown(view = laughImage, repeat = 3, animDelay = 700L)
-            fadeViewOut(view = laughImage, animDelay = 2300L)
-            fadeViewIn(view = backNextButtonsRl, animDelay = 2700L)
-        }
     }
 
     private fun hidePunchlineAndShowSetup() {
@@ -158,9 +167,92 @@ class JokeFragment : Fragment() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putBoolean(IS_PUNCHLINE_VISIBLE_KEY, isPunchlineVisible)
+    private fun startSetupAnimation() {
+        binding.apply {
+            val fader = ObjectAnimator.ofFloat(mainLayout, View.ALPHA, 0f, 1f).apply {
+                duration = 1000
+                interpolator = AccelerateDecelerateInterpolator()
+                disableViewDuringAnimation(questionMarkButton)
+            }
+
+            fader.start()
+        }
     }
 
+    private fun startPunchlineAnimation() {
+        binding.apply {
+
+            val mainLayoutFader = ObjectAnimator.ofFloat(mainLayout, View.ALPHA, 0f).apply {
+                duration = 600L
+                repeatCount = 1
+                repeatMode = ObjectAnimator.REVERSE
+                interpolator = AccelerateDecelerateInterpolator()
+                addListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationRepeat(animation: Animator) {
+                        setupText.visibility = View.GONE
+                        questionMarkButton.visibility = View.GONE
+                        punchlineText.visibility = View.VISIBLE
+                        laughImage.visibility = View.VISIBLE
+                        laughImage.alpha = 1f
+                    }
+                })
+            }
+
+            val containerH = mainLayout.height
+            val scaleValue = (containerH / 300).toFloat()
+            val scaleX = PropertyValuesHolder.ofFloat(View.SCALE_X, scaleValue)
+            val scaleY = PropertyValuesHolder.ofFloat(View.SCALE_Y, scaleValue)
+
+            val jokeContainerScaler =
+                ObjectAnimator.ofPropertyValuesHolder(jokeContainer, scaleX, scaleY).apply {
+                    duration = 600L
+                    repeatCount = 1
+                    repeatMode = ObjectAnimator.REVERSE
+                    interpolator = AccelerateDecelerateInterpolator()
+                }
+
+            val laughImageScaler = ObjectAnimator.ofPropertyValuesHolder(laughImage, scaleX, scaleY)
+                .apply {
+                    startDelay = jokeContainerScaler.duration
+                    duration = 500L
+                    repeatCount = 3
+                    repeatMode = ObjectAnimator.REVERSE
+                    interpolator = AccelerateDecelerateInterpolator()
+                }
+
+            val laughImageFader = ObjectAnimator.ofFloat(laughImage, View.ALPHA, 0f).apply {
+                startDelay = laughImageScaler.totalDuration - 300
+                duration = 500L
+                addListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        laughImage.visibility = View.GONE
+                    }
+                })
+            }
+
+            val backNextButtonsFader =
+                ObjectAnimator.ofFloat(backNextButtonsRl, View.ALPHA, 0f, 1f).apply {
+                    startDelay = laughImageFader.totalDuration - 200
+                    duration = 600L
+                    addListener(object : AnimatorListenerAdapter() {
+                        override fun onAnimationStart(animation: Animator) {
+                            backNextButtonsRl.visibility = View.VISIBLE
+                        }
+                    })
+                }
+
+            val set = AnimatorSet().apply {
+                playTogether(
+                    mainLayoutFader,
+                    jokeContainerScaler,
+                    laughImageScaler,
+                    laughImageFader,
+                    backNextButtonsFader
+                )
+                disableViewDuringAnimation(questionMarkButton)
+            }
+
+            set.start()
+        }
+    }
 }
