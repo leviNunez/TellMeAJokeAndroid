@@ -14,16 +14,7 @@ fun fadeViewIn(view: View, animDuration: Long = 500, animDelay: Long = 0) {
         startDelay = animDelay
         duration = animDuration
         interpolator = AccelerateDecelerateInterpolator()
-        addListener(object : AnimatorListenerAdapter() {
-
-            override fun onAnimationStart(animation: Animator) {
-                view.isEnabled = false
-            }
-
-            override fun onAnimationEnd(animation: Animator) {
-                view.isEnabled = true
-            }
-        })
+        disableWhileAnimating(view)
     }
 
     fader.start()
@@ -86,6 +77,7 @@ fun translateAndRotateView(
         repeatMode = ObjectAnimator.REVERSE
         repeatCount = 1
         interpolator = animInterpolator
+        disableWhileAnimating(view)
     }
 
     val rotator = ObjectAnimator.ofFloat(view, View.ROTATION, -360f, 0f).apply {
@@ -97,4 +89,17 @@ fun translateAndRotateView(
     val set = AnimatorSet()
     set.playTogether(translator, rotator)
     set.start()
+}
+
+private fun ObjectAnimator.disableWhileAnimating(view: View) {
+    addListener(object : AnimatorListenerAdapter() {
+
+        override fun onAnimationStart(animation: Animator) {
+            view.isEnabled = false
+        }
+
+        override fun onAnimationEnd(animation: Animator) {
+            view.isEnabled = true
+        }
+    })
 }

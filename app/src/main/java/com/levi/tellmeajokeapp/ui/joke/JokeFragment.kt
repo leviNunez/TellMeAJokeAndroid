@@ -35,18 +35,27 @@ class JokeFragment : Fragment() {
     ): View {
         binding = FragmentJokeBinding.inflate(layoutInflater, container, false)
 
-        bindListeners()
-
         isPunchlineVisible = savedInstanceState?.getBoolean(IS_PUNCHLINE_VISIBLE_KEY) ?: false
 
         if (isPunchlineVisible) hideSetupAndShowPunchline()
+
+        bindClickListeners()
 
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
 
-    private fun bindListeners() {
+    private fun hideSetupAndShowPunchline() {
+        binding.apply {
+            setupText.visibility = View.GONE
+            questionMarkButton.visibility = View.GONE
+            punchlineText.visibility = View.VISIBLE
+            backNextButtonsRl.visibility = View.VISIBLE
+        }
+    }
+
+    private fun bindClickListeners() {
         binding.apply {
             questionMarkButton.setOnClickListener {
                 viewModel?.revealPunchline()
@@ -63,15 +72,6 @@ class JokeFragment : Fragment() {
             errorLayoutContainer.retryButton.setOnClickListener {
                 viewModel?.next()
             }
-        }
-    }
-
-    private fun hideSetupAndShowPunchline() {
-        binding.apply {
-            setupText.visibility = View.GONE
-            questionMarkButton.visibility = View.GONE
-            punchlineText.visibility = View.VISIBLE
-            backNextButtonsRl.visibility = View.VISIBLE
         }
     }
 
