@@ -1,6 +1,7 @@
 package com.levi.tellmeajokeapp.ui.joke
 
 import android.animation.*
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,10 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AccelerateInterpolator
+import androidx.core.animation.doOnRepeat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.google.android.material.snackbar.Snackbar
+import com.levi.tellmeajokeapp.R
 import com.levi.tellmeajokeapp.databinding.FragmentJokeBinding
 import com.levi.tellmeajokeapp.util.*
 import kotlinx.coroutines.*
@@ -56,7 +60,7 @@ class JokeFragment : Fragment() {
             setupText.visibility = View.GONE
             questionMarkButton.visibility = View.GONE
             punchlineText.visibility = View.VISIBLE
-            backNextButtonsRl.visibility = View.VISIBLE
+            controlButtonsConstainer.visibility = View.VISIBLE
         }
     }
 
@@ -93,20 +97,30 @@ class JokeFragment : Fragment() {
                     }
                 }
                 launch {
-                    viewModel.uiEvent.collect { uiAction ->
+                    viewModel.uiAction.collect { uiAction ->
                         when (uiAction) {
-                            UiActions.Next -> {
+                            is UiAction.Next -> {
                                 isPunchlineVisible = false
                                 hidePunchlineAndShowSetup()
                                 startSetupAnimation()
                             }
-                            UiActions.RevealPunchline -> {
+                            is UiAction.RevealPunchline -> {
                                 isPunchlineVisible = true
                                 startPunchlineAnimation()
                             }
-                            UiActions.Back -> {
+                            is UiAction.Back -> {
                                 isPunchlineVisible = false
                                 hidePunchlineAndShowSetup()
+                            }
+                            is UiAction.ShowSnackBar -> {
+                                uiAction.message?.let { message ->
+                                    Snackbar.make(
+                                        binding.mainLayout,
+                                        getString(R.string.snackbar_error_text, message),
+                                        Snackbar.LENGTH_LONG
+                                    ).setTextMaxLines(1)
+                                        .show()
+                                }
                             }
                         }
                     }
@@ -125,7 +139,7 @@ class JokeFragment : Fragment() {
                     val translateValue = (containerH / 10).toFloat()
                     val translator =
                         ObjectAnimator.ofFloat(
-                            controlButtonsContainer,
+                            buttonsContainer,
                             View.TRANSLATION_Y,
                             -translateValue
                         ).apply {
@@ -136,7 +150,7 @@ class JokeFragment : Fragment() {
                         }
 
                     val rotator =
-                        ObjectAnimator.ofFloat(controlButtonsContainer, View.ROTATION, -360f, 0f)
+                        ObjectAnimator.ofFloat(buttonsContainer, View.ROTATION, -360f, 0f)
                             .apply {
                                 startDelay = 100
                                 duration = 400
@@ -161,7 +175,7 @@ class JokeFragment : Fragment() {
     private fun hidePunchlineAndShowSetup() {
         binding.apply {
             punchlineText.visibility = View.GONE
-            backNextButtonsRl.visibility = View.GONE
+            controlButtonsConstainer.visibility = View.GONE
             setupText.visibility = View.VISIBLE
             questionMarkButton.visibility = View.VISIBLE
         }
@@ -187,13 +201,21 @@ class JokeFragment : Fragment() {
                 repeatCount = 1
                 repeatMode = ObjectAnimator.REVERSE
                 interpolator = AccelerateDecelerateInterpolator()
+
                 addListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationRepeat(animation: Animator) {
                         setupText.visibility = View.GONE
                         questionMarkButton.visibility = View.GONE
                         punchlineText.visibility = View.VISIBLE
                         laughImage.visibility = View.VISIBLE
-                        laughImage.alpha = 1f
+                    }
+
+                    // Needed for testing when animations are disabled
+                    override fun onAnimationEnd(animation: Animator) {
+                        setupText.visibility = View.GONE
+                        questionMarkButton.visibility = View.GONE
+                        punchlineText.visibility = View.VISIBLE
+                        laughImage.visibility = View.VISIBLE
                     }
                 })
             }
@@ -226,17 +248,18 @@ class JokeFragment : Fragment() {
                 addListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
                         laughImage.visibility = View.GONE
+                        laughImage.alpha = 1f
                     }
                 })
             }
 
-            val backNextButtonsFader =
-                ObjectAnimator.ofFloat(backNextButtonsRl, View.ALPHA, 0f, 1f).apply {
+            val controlButtonsFader =
+                ObjectAnimator.ofFloat(controlButtonsConstainer, View.ALPHA, 0f, 1f).apply {
                     startDelay = laughImageFader.totalDuration - 200
                     duration = 600L
                     addListener(object : AnimatorListenerAdapter() {
                         override fun onAnimationStart(animation: Animator) {
-                            backNextButtonsRl.visibility = View.VISIBLE
+                            controlButtonsConstainer.visibility = View.VISIBLE
                         }
                     })
                 }
@@ -247,7 +270,7 @@ class JokeFragment : Fragment() {
                     jokeContainerScaler,
                     laughImageScaler,
                     laughImageFader,
-                    backNextButtonsFader
+                    controlButtonsFader
                 )
                 disableViewDuringAnimation(questionMarkButton)
             }

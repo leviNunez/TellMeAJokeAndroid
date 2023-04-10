@@ -18,8 +18,8 @@ class JokeViewModel(private val jokeRepository: JokeRepository) : ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState
 
-    private val _uiActions = MutableSharedFlow<UiActions>()
-    val uiEvent = _uiActions.asSharedFlow()
+    private val _uiAction = MutableSharedFlow<UiAction>()
+    val uiAction = _uiAction.asSharedFlow()
 
 
     init {
@@ -28,25 +28,21 @@ class JokeViewModel(private val jokeRepository: JokeRepository) : ViewModel() {
 
     fun next() {
         _uiState.update {
-            it.copy(
-                isLoading = true,
-                joke = null,
-                errorMessage = null,
-                shouldPlayAnimationLoop = false
-            )
+            it.copy(isLoading = true, errorMessage = null, shouldPlayAnimationLoop = false)
         }
         viewModelScope.launch {
             val result = jokeRepository.getJoke()
-            _uiState.update {
+            _uiState.update { it ->
                 when (result) {
                     is Success -> it.copy(
-                        isLoading = false,
-                        joke = result.data,
-                        shouldPlayAnimationLoop = true,
+                        isLoading = false, joke = result.data, shouldPlayAnimationLoop = true,
                     ).also {
-                        _uiActions.emit(UiActions.Next)
+                        _uiAction.emit(UiAction.Next)
                     }
-                    is Error -> it.copy(isLoading = false, errorMessage = result.exception.message)
+                    is Error -> {
+                        it.copy(isLoading = false, errorMessage = result.exception.message)
+                            .also { _uiAction.emit(UiAction.ShowSnackBar(it.errorMessage)) }
+                    }
                 }
             }
         }
@@ -54,12 +50,12 @@ class JokeViewModel(private val jokeRepository: JokeRepository) : ViewModel() {
 
     fun revealPunchline() {
         _uiState.update { it.copy(shouldPlayAnimationLoop = false) }
-        viewModelScope.launch { _uiActions.emit(UiActions.RevealPunchline) }
+        viewModelScope.launch { _uiAction.emit(UiAction.RevealPunchline) }
     }
 
     fun back() {
         _uiState.update { it.copy(shouldPlayAnimationLoop = true) }
-        viewModelScope.launch { _uiActions.emit(UiActions.Back) }
+        viewModelScope.launch { _uiAction.emit(UiAction.Back) }
     }
 
     companion object {
@@ -88,8 +84,9 @@ data class UiState(
     val joke: Joke? = null,
 )
 
-sealed class UiActions {
-    object RevealPunchline : UiActions()
-    object Next : UiActions()
-    object Back : UiActions()
+sealed class UiAction {
+    object RevealPunchline : UiAction()
+    object Next : UiAction()
+    object Back : UiAction()
+    data class ShowSnackBar(val message: String?) : UiAction()
 }

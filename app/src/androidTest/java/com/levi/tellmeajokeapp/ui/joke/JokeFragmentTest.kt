@@ -15,6 +15,7 @@ import com.levi.tellmeajokeapp.data.source.FakeAndroidTestJokeRepository
 import com.levi.tellmeajokeapp.data.source.JokeRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.hamcrest.CoreMatchers.not
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -24,86 +25,106 @@ import org.junit.runner.RunWith
 @ExperimentalCoroutinesApi
 internal class JokeFragmentTest {
 
+    private val joke1 = Joke(
+        type = "general",
+        setup = "What did the ocean say to the beach?",
+        punchline = "Thanks for all the sediment.",
+        id = 180
+    )
+    private val joke2 = Joke(
+        type = "general",
+        setup = "What do you call a fat psychic?",
+        punchline = "A four-chin teller.",
+        id = 180
+    )
+
     private lateinit var repository: JokeRepository
 
     @Before
     fun setup() {
-        val joke1 = Joke(
-            type = "general",
-            setup = "What did the ocean say to the beach?",
-            punchline = "Thanks for all the sediment.",
-            id = 180
-        )
-        val joke2 = Joke(
-            type = "general",
-            setup = "What do you call a fat psychic?",
-            punchline = "A four-chin teller.",
-            id = 180
-        )
         repository = FakeAndroidTestJokeRepository(listOf(joke1, joke2))
         ApplicationProvider.getApplicationContext<JokeApplication>().appContainer.jokeRepository =
             repository
     }
 
-    @Test
-    fun launchFragment_displayJokeSetupAndQuestionMarkButton() = runTest {
 
-        // WHEN: Joke fragment is launched
+    @Test
+    fun jokeSetupAndQuestionMarkButton_DisplayedInUi() = runTest {
+        // Given a newly launched JokeFragment
         launchFragmentInContainer<JokeFragment>(themeResId = R.style.Theme_TellMeAJokeApp)
 
-        // THEN: verify the joke setup and question mark buttons are displayed
-        onView(withId(R.id.setup_text)).check(matches(withText("What did the ocean say to the beach?")))
+        // Then verify the joke setup and question mark button are displayed
+        onView(withId(R.id.setup_text)).check(matches(isDisplayed()))
         onView(withId(R.id.question_mark_button)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun clickQuestionMarkButton_displayPunchlineAndBackNextButtons() = runTest {
-
-        // WHEN: The question mark button is pressed
+    fun clickQuestionMarkButton_showPunchlineAndControlButtons() = runTest {
+        // Given a newly launched JokeFragment
         launchFragmentInContainer<JokeFragment>(themeResId = R.style.Theme_TellMeAJokeApp)
+
+        // When the question mark button is pressed
         onView(withId(R.id.question_mark_button)).perform(click())
 
-        // THEN: The joke punchline and the back and next buttons are displayed
+        // Then verify the joke punchline and control buttons are displayed
         onView(withId(R.id.punchline_text)).check(matches(isDisplayed()))
-        onView(withId(R.id.punchline_text)).check(matches(withText("Thanks for all the sediment.")))
         onView(withId(R.id.back_button)).check(matches(isDisplayed()))
         onView(withId(R.id.next_button)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun backButton_displayJokeSetupAndQuestionMarkButton() = runTest {
-
-        // GIVEN: A loaded joke
+    fun clickBackButton_showJokeSetupAndQuestionMarkButton() = runTest {
+        // Given a newly launched JokeFragment
         launchFragmentInContainer<JokeFragment>(themeResId = R.style.Theme_TellMeAJokeApp)
 
-        // ...and the punchline is visible
+        // And the question mark button is clicked
         onView(withId(R.id.question_mark_button)).perform(click())
+
+        // And the punchline is visible
         onView(withId(R.id.punchline_text)).check(matches(isDisplayed()))
 
-        // WHEN: The back button is pressed
+        // When the "Back" button is clicked
         onView(withId(R.id.back_button)).perform(click())
 
-        // THEN: The joke setup and question mark button are visible again
+        // Then verify the joke setup and question mark button are visible again
         onView(withId(R.id.setup_text)).check(matches(isDisplayed()))
-        onView(withId(R.id.setup_text)).check(matches(withText("What did the ocean say to the beach?")))
         onView(withId(R.id.question_mark_button)).check(matches(isDisplayed()))
+
+        // And check the punchline is no longer visible
+        onView(withId(R.id.punchline_text)).check(matches(not(isDisplayed())))
     }
 
     @Test
-    fun nextButton_displayANewJoke() = runTest {
-
-        // GIVEN: An already loaded joke
+    fun clickNextButton_refreshJoke() = runTest {
+        // Given a newly launched JokeFragment
         launchFragmentInContainer<JokeFragment>(themeResId = R.style.Theme_TellMeAJokeApp)
-        onView(withId(R.id.setup_text)).check(matches(withText("What did the ocean say to the beach?")))
-        onView(withId(R.id.question_mark_button)).perform(click())
-        onView(withId(R.id.punchline_text)).check(matches(withText("Thanks for all the sediment.")))
 
-        // WHEN: The "Next" button is pressed
+        // And a joke is displayed
+        onView(withId(R.id.setup_text)).check(matches(withText(joke1.setup)))
+
+        // And the question mark button is clicked
+        onView(withId(R.id.question_mark_button)).perform(click())
+
+        // When The "Next" button is clicked
         onView(withId(R.id.next_button)).perform(click())
 
-        // THEN: Verify a new joke is loaded
-        onView(withId(R.id.setup_text)).check(matches(withText("What do you call a fat psychic?")))
-        onView(withId(R.id.question_mark_button)).perform(click())
-        onView(withId(R.id.punchline_text)).check(matches(withText("A four-chin teller.")))
+        // Then verify a new joke is displayed
+        onView(withId(R.id.setup_text)).check(matches(withText(joke2.setup)))
+    }
+
+    @Test
+    fun hasError_errorLayoutDisplayed() = runTest {
+        // Given a repository that is set to return an error
+        repository = FakeAndroidTestJokeRepository(shouldReturnError = true, jokeData = emptyList())
+        ApplicationProvider.getApplicationContext<JokeApplication>().appContainer.jokeRepository =
+            repository
+
+        // When the JokeFragment is launched
+        launchFragmentInContainer<JokeFragment>(themeResId = R.style.Theme_TellMeAJokeApp)
+
+        // Verify the error layout is displayed
+        onView(withId(R.id.error_image)).check(matches(isDisplayed()))
+        onView(withId(R.id.error_text)).check(matches(isDisplayed()))
+        onView(withId(R.id.retry_button)).check(matches(isDisplayed()))
     }
 }

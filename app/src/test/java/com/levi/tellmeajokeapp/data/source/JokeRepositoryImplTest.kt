@@ -4,9 +4,9 @@ import com.google.common.truth.Truth.assertThat
 import com.levi.tellmeajokeapp.MainCoroutineRule
 import com.levi.tellmeajokeapp.data.Joke
 import com.levi.tellmeajokeapp.data.Result.Success
+import com.levi.tellmeajokeapp.data.Result.Error
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
@@ -19,7 +19,6 @@ internal class JokeRepositoryImplTest {
         punchline = "Thanks for all the sediment.",
         id = 180
     )
-    private lateinit var remoteDataSource: FakeDataSource
 
     //subject under test
     private lateinit var jokeRepository: JokeRepositoryImpl
@@ -27,18 +26,28 @@ internal class JokeRepositoryImplTest {
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
-    @Before
-    fun createRepository() {
-        remoteDataSource = FakeDataSource(joke = remoteJoke)
-        jokeRepository = JokeRepositoryImpl(remoteDataSource)
+
+    @Test
+    fun `getJoke on success loads a joke from remote data source`() = runTest {
+        // Given a jokeRepository with a fake dataSource
+        jokeRepository = JokeRepositoryImpl(FakeDataSource(joke = remoteJoke))
+
+        // When a joke is requested from the repository
+        val joke = jokeRepository.getJoke() as Success
+
+        // Then assert that joke is loaded from remote data source
+        assertThat(joke.data).isEqualTo(remoteJoke)
     }
 
     @Test
-    fun `getJoke requests a joke from the remote data source`() = runTest {
-        // WHEN: a joke is requested from the joke repository
-        val joke = jokeRepository.getJoke() as Success
+    fun `getJoke on error expect error result`() = runTest {
+        // Given a jokeRepository with a fake dataSource
+        jokeRepository = JokeRepositoryImpl(FakeDataSource(joke = null))
 
-        // THEN: a joke is loaded from remote data source
-        assertThat(joke.data).isEqualTo(remoteJoke)
+        // When a joke is requested from the repository
+        val result = jokeRepository.getJoke() as Error
+
+        // Then assert that proper error message is received
+        assertThat(result.exception.message).isEqualTo("Test exception")
     }
 }
