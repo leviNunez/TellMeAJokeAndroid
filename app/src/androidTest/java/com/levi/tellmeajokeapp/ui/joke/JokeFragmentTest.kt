@@ -1,7 +1,6 @@
 package com.levi.tellmeajokeapp.ui.joke
 
 import androidx.fragment.app.testing.launchFragmentInContainer
-import androidx.test.InstrumentationRegistry.getTargetContext
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -9,19 +8,13 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
-import androidx.test.platform.app.InstrumentationRegistry
-import com.google.android.material.snackbar.Snackbar
 import com.levi.tellmeajokeapp.JokeApplication
 import com.levi.tellmeajokeapp.R
 import com.levi.tellmeajokeapp.data.Joke
 import com.levi.tellmeajokeapp.data.source.FakeAndroidTestJokeRepository
 import com.levi.tellmeajokeapp.data.source.JokeRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.test.advanceTimeBy
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.not
 import org.junit.Before
 import org.junit.Test
