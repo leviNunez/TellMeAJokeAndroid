@@ -11,6 +11,6 @@ class FakeDataSource(var joke: Joke?) : JokeDataSource {
         joke?.let {
             return Success(data = it)
         }
-        return Error(Exception("Joke not found"))
+        return Error(Exception("Test exception"))
     }
 }

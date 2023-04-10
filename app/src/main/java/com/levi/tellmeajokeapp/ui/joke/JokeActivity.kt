@@ -1,11 +1,11 @@
-package com.levi.tellmeajokeapp
+package com.levi.tellmeajokeapp.ui.joke
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.levi.tellmeajokeapp.ui.joke.JokeFragment
+import com.levi.tellmeajokeapp.R
 
-class MainActivity : AppCompatActivity() {
+class JokeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
