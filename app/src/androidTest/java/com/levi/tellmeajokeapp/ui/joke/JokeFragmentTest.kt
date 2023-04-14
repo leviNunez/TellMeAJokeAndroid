@@ -36,6 +36,8 @@ internal class JokeFragmentTest {
         id = 280
     )
 
+    private val animationDelayTime = 300L
+
     @Before
     fun setupRepository() {
         val repository = FakeAndroidTestJokeRepository(listOf(joke1, joke2))
@@ -64,7 +66,7 @@ internal class JokeFragmentTest {
         // Wait for the animation to finish
         val deferred = async {
             withContext(Dispatchers.Default) {
-                delay(200)
+                delay(animationDelayTime)
             }
         }
         deferred.await()
@@ -86,7 +88,7 @@ internal class JokeFragmentTest {
         // Wait for the animation to finish
         val deferred = async {
             withContext(Dispatchers.Default) {
-                delay(200)
+                delay(animationDelayTime)
             }
         }
         deferred.await()
@@ -119,7 +121,7 @@ internal class JokeFragmentTest {
         // Wait for the animation to finish
         val deferred = async {
             withContext(Dispatchers.Default) {
-                delay(200)
+                delay(animationDelayTime)
             }
         }
         deferred.await()
