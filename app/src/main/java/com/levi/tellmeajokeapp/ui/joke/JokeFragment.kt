@@ -204,7 +204,9 @@ class JokeFragment : Fragment() {
 
                 fadeViewOut(
                     view = laughImage,
-                    onEnd = { laughImage.visibility = View.GONE }).also { it.awaitEnd() }
+                    onEnd = { laughImage.visibility = View.GONE })
+
+                delay(100L)
 
                 fadeViewIn(
                     view = controlButtonsContainer,
