@@ -35,19 +35,19 @@ internal class JokeRepositoryImplTest {
         // When a joke is requested from the repository
         val joke = jokeRepository.getJoke() as Success
 
-        // Then assert that joke is loaded from remote data source
+        // Then assert that joke is loaded
         assertThat(joke.data).isEqualTo(remoteJoke)
     }
 
     @Test
     fun `getJoke on error expect error result`() = runTest {
-        // Given a jokeRepository with a fake dataSource
+        // Given a jokeRepository with a fake dataSource that has no data
         jokeRepository = JokeRepositoryImpl(FakeDataSource(joke = null))
 
         // When a joke is requested from the repository
         val result = jokeRepository.getJoke() as Error
 
-        // Then assert that proper error message is received
+        // Then assert that an error result is received
         assertThat(result.exception.message).isEqualTo("Test exception")
     }
 }

@@ -25,7 +25,7 @@
             layout="@layout/custom_progress_indicator"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="@{viewModel.uiState.loading == true ? View.VISIBLE : View.GONE}"
+            android:visibility="@{viewModel.uiState.loading ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -38,7 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingHorizontal="@dimen/spacing_normal"
-            android:visibility="@{viewModel.uiState.joke != null &amp;&amp; viewModel.uiState.loading != true ? View.VISIBLE : View.GONE}"
+            android:visibility="@{viewModel.uiState.joke != null &amp;&amp; viewModel.uiState.loading == false ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -66,7 +66,7 @@
             android:id="@+id/buttons_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="@{viewModel.uiState.joke != null &amp;&amp; viewModel.uiState.loading != true ? View.VISIBLE : View.GONE}"
+            android:visibility="@{viewModel.uiState.joke != null &amp;&amp; viewModel.uiState.loading == false ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -81,7 +81,7 @@
                 android:contentDescription="@string/question_mark_button_description" />
 
             <RelativeLayout
-                android:id="@+id/control_buttons_constainer"
+                android:id="@+id/control_buttons_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -157,7 +157,7 @@
             layout="@layout/error_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{viewModel.uiState.errorMessage != null &amp;&amp; viewModel.uiState.joke == null? View.VISIBLE : View.GONE}"
+            android:visibility="@{viewModel.uiState.hasError &amp;&amp; viewModel.uiState.joke == null? View.VISIBLE : View.GONE}"
             tools:visibility="gone" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
