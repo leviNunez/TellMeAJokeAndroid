@@ -96,6 +96,7 @@ inline fun scaleViewUpAndDown(
     val scaleValue = (containerH / 300).toFloat()
     val scaleX = PropertyValuesHolder.ofFloat(View.SCALE_X, scaleValue)
     val scaleY = PropertyValuesHolder.ofFloat(View.SCALE_Y, scaleValue)
+
     return ObjectAnimator.ofPropertyValuesHolder(view, scaleX, scaleY)
         .apply {
             duration = 500L
