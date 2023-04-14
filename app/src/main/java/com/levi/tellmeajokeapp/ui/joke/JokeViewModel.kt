@@ -21,6 +21,8 @@ class JokeViewModel(private val jokeRepository: JokeRepository) : ViewModel() {
     private val _uiAction = MutableSharedFlow<UiAction>()
     val uiAction = _uiAction.asSharedFlow()
 
+    private val _snackbarEvent = MutableSharedFlow<String?>()
+    val snackbarEvent = _snackbarEvent.asSharedFlow()
 
     init {
         next()
@@ -28,21 +30,17 @@ class JokeViewModel(private val jokeRepository: JokeRepository) : ViewModel() {
 
     fun next() {
         _uiState.update {
-            it.copy(isLoading = true, errorMessage = null, shouldPlayAnimationLoop = false)
+            it.copy(isLoading = true, hasError = false, shouldPlayAnimationLoop = false)
         }
         viewModelScope.launch {
             val result = jokeRepository.getJoke()
-            _uiState.update { it ->
+            _uiState.update {
                 when (result) {
                     is Success -> it.copy(
-                        isLoading = false, joke = result.data, shouldPlayAnimationLoop = true,
-                    ).also {
-                        _uiAction.emit(UiAction.Next)
-                    }
-                    is Error -> {
-                        it.copy(isLoading = false, errorMessage = result.exception.message)
-                            .also { _uiAction.emit(UiAction.ShowSnackBar(it.errorMessage)) }
-                    }
+                        isLoading = false, joke = result.data, shouldPlayAnimationLoop = true
+                    ).also { _uiAction.emit(UiAction.Next) }
+                    is Error -> it.copy(isLoading = false, hasError = true)
+                        .also { _snackbarEvent.emit(result.exception.message) }
                 }
             }
         }
@@ -69,7 +67,7 @@ class JokeViewModel(private val jokeRepository: JokeRepository) : ViewModel() {
                 val application = checkNotNull(extras[APPLICATION_KEY])
 
                 return JokeViewModel(
-                    jokeRepository = (application as JokeApplication).appContainer.jokeRepository
+                    jokeRepository = (application as JokeApplication).appContainer.repository
                 ) as T
             }
         }
@@ -80,13 +78,12 @@ class JokeViewModel(private val jokeRepository: JokeRepository) : ViewModel() {
 data class UiState(
     val isLoading: Boolean = false,
     val shouldPlayAnimationLoop: Boolean = false,
-    val errorMessage: String? = null,
+    val hasError: Boolean = false,
     val joke: Joke? = null,
 )
 
 sealed class UiAction {
+    object Back : UiAction()
     object RevealPunchline : UiAction()
     object Next : UiAction()
-    object Back : UiAction()
-    data class ShowSnackBar(val message: String?) : UiAction()
 }

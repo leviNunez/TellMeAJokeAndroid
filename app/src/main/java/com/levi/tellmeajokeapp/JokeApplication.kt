@@ -1,8 +1,11 @@
 package com.levi.tellmeajokeapp
 
 import android.app.Application
+import androidx.annotation.VisibleForTesting
+import com.levi.tellmeajokeapp.AppContainer
 
 class JokeApplication : Application() {
 
-    val appContainer = AppContainer()
+    var appContainer: AppContainer = AppContainerImpl()
+        @VisibleForTesting set
 }

@@ -8,13 +8,11 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
-import com.levi.tellmeajokeapp.JokeApplication
-import com.levi.tellmeajokeapp.R
+import com.levi.tellmeajokeapp.*
 import com.levi.tellmeajokeapp.data.Joke
 import com.levi.tellmeajokeapp.data.source.FakeAndroidTestJokeRepository
-import com.levi.tellmeajokeapp.data.source.JokeRepository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.*
+import kotlinx.coroutines.test.*
 import org.hamcrest.CoreMatchers.not
 import org.junit.Before
 import org.junit.Test
@@ -35,18 +33,15 @@ internal class JokeFragmentTest {
         type = "general",
         setup = "What do you call a fat psychic?",
         punchline = "A four-chin teller.",
-        id = 180
+        id = 280
     )
 
-    private lateinit var repository: JokeRepository
-
     @Before
-    fun setup() {
-        repository = FakeAndroidTestJokeRepository(listOf(joke1, joke2))
-        ApplicationProvider.getApplicationContext<JokeApplication>().appContainer.jokeRepository =
-            repository
+    fun setupRepository() {
+        val repository = FakeAndroidTestJokeRepository(listOf(joke1, joke2))
+        val container = FakeAppContainer(repository)
+        ApplicationProvider.getApplicationContext<JokeApplication>().appContainer = container
     }
-
 
     @Test
     fun jokeSetupAndQuestionMarkButton_DisplayedInUi() = runTest {
@@ -63,8 +58,16 @@ internal class JokeFragmentTest {
         // Given a newly launched JokeFragment
         launchFragmentInContainer<JokeFragment>(themeResId = R.style.Theme_TellMeAJokeApp)
 
-        // When the question mark button is pressed
+        // When the question mark button is clicked
         onView(withId(R.id.question_mark_button)).perform(click())
+
+        // Wait for the animation to finish
+        val deferred = async {
+            withContext(Dispatchers.Default) {
+                delay(200)
+            }
+        }
+        deferred.await()
 
         // Then verify the joke punchline and control buttons are displayed
         onView(withId(R.id.punchline_text)).check(matches(isDisplayed()))
@@ -77,10 +80,18 @@ internal class JokeFragmentTest {
         // Given a newly launched JokeFragment
         launchFragmentInContainer<JokeFragment>(themeResId = R.style.Theme_TellMeAJokeApp)
 
-        // And the question mark button is clicked
+        // Click on the question mark button
         onView(withId(R.id.question_mark_button)).perform(click())
 
-        // And the punchline is visible
+        // Wait for the animation to finish
+        val deferred = async {
+            withContext(Dispatchers.Default) {
+                delay(200)
+            }
+        }
+        deferred.await()
+
+        // Verify the punchline is visible
         onView(withId(R.id.punchline_text)).check(matches(isDisplayed()))
 
         // When the "Back" button is clicked
@@ -99,30 +110,39 @@ internal class JokeFragmentTest {
         // Given a newly launched JokeFragment
         launchFragmentInContainer<JokeFragment>(themeResId = R.style.Theme_TellMeAJokeApp)
 
-        // And a joke is displayed
+        // Verify that a joke is displayed
         onView(withId(R.id.setup_text)).check(matches(withText(joke1.setup)))
 
-        // And the question mark button is clicked
+        // Click the question mark button
         onView(withId(R.id.question_mark_button)).perform(click())
+
+        // Wait for the animation to finish
+        val deferred = async {
+            withContext(Dispatchers.Default) {
+                delay(200)
+            }
+        }
+        deferred.await()
 
         // When The "Next" button is clicked
         onView(withId(R.id.next_button)).perform(click())
 
-        // Then verify a new joke is displayed
+        // Then verify that a new joke is displayed
         onView(withId(R.id.setup_text)).check(matches(withText(joke2.setup)))
     }
 
     @Test
     fun hasError_errorLayoutDisplayed() = runTest {
         // Given a repository that is set to return an error
-        repository = FakeAndroidTestJokeRepository(shouldReturnError = true, jokeData = emptyList())
-        ApplicationProvider.getApplicationContext<JokeApplication>().appContainer.jokeRepository =
-            repository
+        val repository =
+            FakeAndroidTestJokeRepository(shouldReturnError = true, jokeData = emptyList())
+        val container = FakeAppContainer(repository)
+        ApplicationProvider.getApplicationContext<JokeApplication>().appContainer = container
 
         // When the JokeFragment is launched
         launchFragmentInContainer<JokeFragment>(themeResId = R.style.Theme_TellMeAJokeApp)
 
-        // Verify the error layout is displayed
+        // Verify that the error layout is displayed
         onView(withId(R.id.error_image)).check(matches(isDisplayed()))
         onView(withId(R.id.error_text)).check(matches(isDisplayed()))
         onView(withId(R.id.retry_button)).check(matches(isDisplayed()))

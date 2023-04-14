@@ -6,8 +6,7 @@ import com.levi.tellmeajokeapp.data.Result
 class FakeAndroidTestJokeRepository(
     private val jokeData: List<Joke>,
     private val shouldReturnError: Boolean = false
-) :
-    JokeRepository {
+) : JokeRepository {
 
     private var index = -1
 
@@ -17,8 +16,7 @@ class FakeAndroidTestJokeRepository(
         }
 
         index++
+
         return Result.Success(data = jokeData[index])
-
     }
-
 }

@@ -40,7 +40,7 @@ internal class JokeViewModelTest {
     }
 
     @Test
-    fun `next on success sets the joke and emits the correct value`() = runTest() {
+    fun `next on success emits the correct value and sets the joke`() = runTest {
         // Given a fresh viewmodel with a fake repository
         val viewModel = JokeViewModel(jokeRepository)
 
@@ -61,11 +61,11 @@ internal class JokeViewModelTest {
 
         // Assert that the joke is set
         assertThat(stateValue.joke).isNotNull()
-        assertThat(stateValue.joke?.id).isEqualTo(joke.id)
+        assertThat(stateValue.joke).isEqualTo(joke)
     }
 
     @Test
-    fun `next on error sets the error message and emits the correct value`() = runTest {
+    fun `next on error emits the correct value and sets the error state `() = runTest {
         // Given a fresh viewmodel with a fake repository set to return an error
         jokeRepository.setReturnError(value = true)
         val viewModel = JokeViewModel(jokeRepository)
@@ -73,24 +73,24 @@ internal class JokeViewModelTest {
         // When next is executed
         viewModel.next()
 
-        // And uiAction emits a value
-        val actionValue = viewModel.uiAction.first()
+        // And snackbarEvent emits a value
+        val message = viewModel.snackbarEvent.first()
 
         // Then check if it is the expected value
-        assertThat(actionValue).isEqualTo(UiAction.ShowSnackBar("Test exception"))
+        assertThat(message).isEqualTo("Test exception")
 
-        // Advance time until next() completes
+        // Advance time until next() completes all of its tasks
         advanceUntilIdle()
 
         // Get the value of uiState
         val stateValue = viewModel.uiState.value
 
-        // Assert that the error message is set
-        assertThat(stateValue.errorMessage).isNotNull()
+        // Assert that hasError is true
+        assertThat(stateValue.hasError).isTrue()
     }
 
     @Test
-    fun `revealPunchline emits the correct value`() = runTest() {
+    fun `revealPunchline emits the correct value`() = runTest {
         // Given a fresh viewmodel with a fake repository
         val viewModel = JokeViewModel(jokeRepository)
 
