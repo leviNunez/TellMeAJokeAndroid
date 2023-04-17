@@ -84,8 +84,8 @@ data class UiState(
     val joke: Joke? = null,
 )
 
-sealed class UiAction {
-    object Back : UiAction()
-    object RevealPunchline : UiAction()
-    object Next : UiAction()
+sealed interface UiAction {
+    object Back : UiAction
+    object RevealPunchline : UiAction
+    object Next : UiAction
 }
