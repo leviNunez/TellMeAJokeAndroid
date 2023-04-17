@@ -104,16 +104,16 @@ class JokeFragment : Fragment() {
                 launch {
                     viewModel.uiAction.collect { uiAction ->
                         when (uiAction) {
-                            is UiAction.Next -> {
+                            UiAction.Next -> {
                                 isPunchlineVisible = false
                                 hidePunchlineAndShowSetup()
                                 startSetupAnimation()
                             }
-                            is UiAction.RevealPunchline -> {
+                            UiAction.RevealPunchline -> {
                                 isPunchlineVisible = true
                                 startPunchlineAnimation()
                             }
-                            is UiAction.Back -> {
+                            UiAction.Back -> {
                                 isPunchlineVisible = false
                                 hidePunchlineAndShowSetup()
                             }
