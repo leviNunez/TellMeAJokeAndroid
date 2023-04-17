@@ -1,16 +1,10 @@
 package com.levi.tellmeajokeapp.ui.joke
 
-import android.animation.*
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.AccelerateInterpolator
-import androidx.core.animation.doOnEnd
-import androidx.core.animation.doOnRepeat
-import androidx.core.animation.doOnStart
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -46,8 +40,8 @@ class JokeFragment : Fragment() {
         binding = FragmentJokeBinding.inflate(layoutInflater, container, false)
 
         savedInstanceState?.getBoolean(IS_PUNCHLINE_VISIBLE_KEY)?.let { isVisible ->
-            isPunchlineVisible = isVisible
             if (isVisible) hideSetupAndShowPunchline()
+            isPunchlineVisible = isVisible
         }
 
         bindClickListeners()
@@ -96,6 +90,15 @@ class JokeFragment : Fragment() {
                             uiState.shouldPlayAnimationLoop -> startAnimationLoop()
                             else -> cancelAnimationLoop()
                         }
+                        uiState.errorMessage?.let { message ->
+                            Snackbar.make(
+                                binding.mainLayout,
+                                getString(R.string.snackbar_error_text, message),
+                                Snackbar.LENGTH_LONG
+                            ).setTextMaxLines(1)
+                                .show()
+                            viewModel.snackbarShown()
+                        }
                     }
                 }
                 launch {
@@ -114,18 +117,6 @@ class JokeFragment : Fragment() {
                                 isPunchlineVisible = false
                                 hidePunchlineAndShowSetup()
                             }
-                        }
-                    }
-                }
-                launch {
-                    viewModel.snackbarEvent.collect { message ->
-                        message?.let {
-                            Snackbar.make(
-                                binding.mainLayout,
-                                getString(R.string.snackbar_error_text, message),
-                                Snackbar.LENGTH_LONG
-                            ).setTextMaxLines(1)
-                                .show()
                         }
                     }
                 }

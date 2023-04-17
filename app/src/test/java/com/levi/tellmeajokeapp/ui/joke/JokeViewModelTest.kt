@@ -34,9 +34,7 @@ internal class JokeViewModelTest {
     @Before
     fun setupRepository() {
         jokeRepository = FakeTestJokeRepository()
-
         jokeRepository.setJoke(joke)
-
     }
 
     @Test
@@ -44,7 +42,7 @@ internal class JokeViewModelTest {
         // Given a fresh viewmodel with a fake repository
         val viewModel = JokeViewModel(jokeRepository)
 
-        // When next() is executed
+        // When next() is called
         viewModel.next()
 
         // And uiAction emits a value
@@ -53,7 +51,7 @@ internal class JokeViewModelTest {
         // Then check if it is the expected value
         assertThat(actionValue).isEqualTo(UiAction.Next)
 
-        // Advance time until next() completes
+        // Advance time until next() completes all of its tasks
         advanceUntilIdle()
 
         // Get the value of uiState
@@ -65,7 +63,7 @@ internal class JokeViewModelTest {
     }
 
     @Test
-    fun `next on error emits the correct value and sets the error state `() = runTest {
+    fun `next on error sets errorMessage`() = runTest {
         // Given a fresh viewmodel with a fake repository set to return an error
         jokeRepository.setReturnError(value = true)
         val viewModel = JokeViewModel(jokeRepository)
@@ -73,20 +71,14 @@ internal class JokeViewModelTest {
         // When next is executed
         viewModel.next()
 
-        // And snackbarEvent emits a value
-        val message = viewModel.snackbarEvent.first()
-
-        // Then check if it is the expected value
-        assertThat(message).isEqualTo("Test exception")
-
         // Advance time until next() completes all of its tasks
         advanceUntilIdle()
 
         // Get the value of uiState
         val stateValue = viewModel.uiState.value
 
-        // Assert that hasError is true
-        assertThat(stateValue.hasError).isTrue()
+        // Then assert that errorMessage is set
+        assertThat(stateValue.errorMessage).isEqualTo("Test exception")
     }
 
     @Test
@@ -97,7 +89,7 @@ internal class JokeViewModelTest {
         // Advance time until all initialization tasks are completed
         advanceUntilIdle()
 
-        // When revealPunchline() is executed
+        // When revealPunchline() is called
         viewModel.revealPunchline()
 
         // And uiAction emits a value
@@ -115,7 +107,7 @@ internal class JokeViewModelTest {
         // Advance time until all initialization tasks are completed
         advanceUntilIdle()
 
-        // When back() is executed
+        // When back() is called
         viewModel.back()
 
         // And uiAction emits a value
@@ -123,5 +115,33 @@ internal class JokeViewModelTest {
 
         // Then check if it is the expected value
         assertThat(value).isEqualTo(UiAction.Back)
+    }
+
+    @Test
+    fun `snackbarShown sets errorMessage to null`() = runTest {
+        // Given a fresh viewmodel with a fake repository set to return an error
+        jokeRepository.setReturnError(value = true)
+        val viewModel = JokeViewModel(jokeRepository)
+
+        // Call next() to set the uiState
+        viewModel.next()
+
+        // Advance time until next() completes all of its tasks
+        advanceUntilIdle()
+
+        // Get the value of uiState
+        var stateValue = viewModel.uiState.value
+
+        // Verify the errorMessage is not null
+        assertThat(stateValue.errorMessage).isNotNull()
+
+        // When snackbarShown() is called
+        viewModel.snackbarShown()
+
+        // Get the updated value of uiState
+        stateValue = viewModel.uiState.value
+
+        // Then assert that errorMessage is null
+        assertThat(stateValue.errorMessage).isNull()
     }
 }

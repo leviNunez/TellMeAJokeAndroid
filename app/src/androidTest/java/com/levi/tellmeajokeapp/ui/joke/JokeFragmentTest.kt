@@ -134,7 +134,7 @@ internal class JokeFragmentTest {
     }
 
     @Test
-    fun hasError_errorLayoutDisplayed() = runTest {
+    fun errorMessage_notNull_errorLayoutDisplayed() = runTest {
         // Given a repository that is set to return an error
         val repository =
             FakeAndroidTestJokeRepository(shouldReturnError = true, jokeData = emptyList())
