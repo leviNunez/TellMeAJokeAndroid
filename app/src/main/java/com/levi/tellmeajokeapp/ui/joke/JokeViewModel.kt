@@ -21,26 +21,24 @@ class JokeViewModel(private val jokeRepository: JokeRepository) : ViewModel() {
     private val _uiAction = MutableSharedFlow<UiAction>()
     val uiAction = _uiAction.asSharedFlow()
 
-    private val _snackbarEvent = MutableSharedFlow<String?>()
-    val snackbarEvent = _snackbarEvent.asSharedFlow()
-
     init {
         next()
     }
 
     fun next() {
         _uiState.update {
-            it.copy(isLoading = true, hasError = false, shouldPlayAnimationLoop = false)
+            it.copy(isLoading = true)
         }
         viewModelScope.launch {
             val result = jokeRepository.getJoke()
             _uiState.update {
                 when (result) {
                     is Success -> it.copy(
-                        isLoading = false, joke = result.data, shouldPlayAnimationLoop = true
+                        isLoading = false,
+                        joke = result.data,
+                        shouldPlayAnimationLoop = true
                     ).also { _uiAction.emit(UiAction.Next) }
-                    is Error -> it.copy(isLoading = false, hasError = true)
-                        .also { _snackbarEvent.emit(result.exception.message) }
+                    is Error -> it.copy(isLoading = false, errorMessage = result.exception.message)
                 }
             }
         }
@@ -54,6 +52,10 @@ class JokeViewModel(private val jokeRepository: JokeRepository) : ViewModel() {
     fun back() {
         _uiState.update { it.copy(shouldPlayAnimationLoop = true) }
         viewModelScope.launch { _uiAction.emit(UiAction.Back) }
+    }
+
+    fun snackbarShown() {
+        _uiState.update { it.copy(errorMessage = null) }
     }
 
     companion object {
@@ -78,7 +80,7 @@ class JokeViewModel(private val jokeRepository: JokeRepository) : ViewModel() {
 data class UiState(
     val isLoading: Boolean = false,
     val shouldPlayAnimationLoop: Boolean = false,
-    val hasError: Boolean = false,
+    val errorMessage: String? = null,
     val joke: Joke? = null,
 )
 

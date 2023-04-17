@@ -157,7 +157,7 @@
             layout="@layout/error_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{viewModel.uiState.hasError &amp;&amp; viewModel.uiState.joke == null? View.VISIBLE : View.GONE}"
+            android:visibility="@{viewModel.uiState.joke == null &amp;&amp; viewModel.uiState.loading == false ? View.VISIBLE : View.GONE}"
             tools:visibility="gone" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
