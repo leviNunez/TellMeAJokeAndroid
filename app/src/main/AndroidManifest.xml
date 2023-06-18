@@ -16,7 +16,7 @@
         android:theme="@style/Theme.App.Starting"
         tools:targetApi="31">
         <activity
-            android:name=".ui.joke.JokeActivity"
+            android:name=".view.JokeActivity"
             android:exported="true"
             >
             <intent-filter>

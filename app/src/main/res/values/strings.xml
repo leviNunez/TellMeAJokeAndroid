@@ -5,11 +5,12 @@
     <string name="question_mark_button_description">Reveal punchline</string>
     <string name="laugh_emoji">A laugh emoji</string>
     <string name="question_mark_button_text">\?</string>
-    <string name="back_button_description">Back</string>
+    <string name="back_button_description">Back to previous joke</string>
     <string name="next_button_description">Next joke</string>
     <string name="retry_button_description">Retry</string>
     <string name="error_message_text">Oops… I think something \nwent wrong.</string>
     <string name="loading_text">Loading fast…</string>
     <string name="retry_button_text">Retry</string>
     <string name="snackbar_error_text">Error: %s</string>
+    <string name="explosion_image_description">Explosion image</string>
 </resources>
