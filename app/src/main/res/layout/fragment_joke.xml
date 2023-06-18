@@ -1,164 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
+<layout>
     <data>
-
-        <import type="android.view.View" />
-
         <variable
             name="viewModel"
-            type="com.levi.tellmeajokeapp.ui.joke.JokeViewModel" />
+            type="com.levi.tellmeajokeapp.viewmodel.JokeViewModel" />
+        <import type="android.view.View"/>
+        <import type="com.levi.tellmeajokeapp.viewmodel.UiState"/>
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/main_layout"
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/joke_host"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipChildren="false"
+        android:clipToPadding="false"
         tools:background="@color/blue_700"
-        tools:context=".ui.joke.JokeFragment">
+        tools:context=".view.JokeFragment">
 
         <include
-            android:id="@+id/progress_indicator"
-            layout="@layout/custom_progress_indicator"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="@{viewModel.uiState.loading ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="gone" />
-
-
-        <FrameLayout
-            android:id="@+id/joke_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="@dimen/spacing_normal"
-            android:visibility="@{viewModel.uiState.joke != null &amp;&amp; viewModel.uiState.loading == false ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:id="@+id/setup_text"
-                style="@style/jokeTextStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{viewModel.uiState.joke.setup}"
-                tools:text="What did the ocean say to the beach?" />
-
-            <TextView
-                android:id="@+id/punchline_text"
-                style="@style/jokeTextStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{viewModel.uiState.joke.punchline}"
-                android:visibility="gone"
-                tools:text="Thanks for all the sediment." />
-        </FrameLayout>
-
-        <FrameLayout
-            android:id="@+id/buttons_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="@{viewModel.uiState.joke != null &amp;&amp; viewModel.uiState.loading == false ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/joke_container">
-
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/question_mark_button"
-                android:layout_width="@dimen/default_button_size"
-                android:layout_height="@dimen/default_button_size"
-                android:layout_gravity="center"
-                android:background="@drawable/question_mark_button"
-                android:contentDescription="@string/question_mark_button_description" />
-
-            <RelativeLayout
-                android:id="@+id/control_buttons_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:visibility="gone">
-
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginStart="@dimen/spacing_extra_large"
-                    android:orientation="vertical">
-
-                    <androidx.appcompat.widget.AppCompatImageButton
-                        android:id="@+id/back_button"
-                        style="@style/Widget.AppCompat.Button.Borderless"
-                        android:layout_width="@dimen/default_button_size"
-                        android:layout_height="@dimen/default_button_size"
-                        android:background="@drawable/previous_button"
-                        android:contentDescription="@string/back_button_text" />
-
-                    <TextView
-                        android:id="@+id/previous_button_text"
-                        style="@style/buttonTextStyle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_small"
-                        android:text="@string/back_button_text" />
-                </androidx.appcompat.widget.LinearLayoutCompat>
-
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="@dimen/spacing_extra_large"
-                    android:orientation="vertical">
-
-                    <androidx.appcompat.widget.AppCompatImageButton
-                        android:id="@+id/next_button"
-                        style="@style/Widget.AppCompat.Button.Borderless"
-                        android:layout_width="@dimen/default_button_size"
-                        android:layout_height="@dimen/default_button_size"
-                        android:background="@drawable/next_button"
-                        android:contentDescription="@string/next_button_description" />
-
-                    <TextView
-                        android:id="@+id/next_button_text"
-                        style="@style/buttonTextStyle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_small"
-                        android:text="@string/next_button_text" />
-                </androidx.appcompat.widget.LinearLayoutCompat>
-            </RelativeLayout>
-
-        </FrameLayout>
-
-        <ImageView
-            android:id="@+id/laugh_image"
-            android:layout_width="@dimen/default_image_size"
-            android:layout_height="@dimen/default_image_size"
-            android:layout_gravity="center"
-            android:contentDescription="@string/laugh_emoji"
-            android:src="@drawable/ic_laughing"
+            layout="@layout/joke_progress_indicator_layout"
+            android:id="@+id/joke_progress_indicator_view"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/joke_container"
-            tools:visibility="gone" />
-
+            tools:visibility="gone"
+            />
         <include
-            android:id="@+id/error_layout_container"
+            layout="@layout/setup_layout"
+            android:id="@+id/setup_view"
+            android:visibility="gone"
+            tools:visibility="visible"
+            />
+        <include
+            layout="@layout/punchline_layout"
+            android:id="@+id/punchline_view"
+            android:visibility="gone"
+            tools:visibility="gone"
+            />
+        <include
             layout="@layout/error_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="@{viewModel.uiState.joke == null &amp;&amp; viewModel.uiState.loading == false ? View.VISIBLE : View.GONE}"
+            android:id="@+id/error_view"
+            android:visibility="gone"
             tools:visibility="gone" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
 </layout>

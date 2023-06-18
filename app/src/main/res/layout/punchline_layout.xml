@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/punchline_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="@dimen/spacing_large"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        tools:background="@color/blue_700"
+        tools:showIn="@layout/fragment_joke">
+
+        <TextView
+            android:id="@+id/punchline_text"
+            style="@style/jokeTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/bottom_container"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Thanks for all the sediment." />
+
+        <FrameLayout
+            android:id="@+id/bottom_container"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/default_buttons_container_height"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/punchline_text">
+
+            <ImageView
+                android:id="@+id/laugh_image"
+                android:layout_width="@dimen/default_image_size"
+                android:layout_height="@dimen/default_image_size"
+                android:layout_gravity="center"
+                android:contentDescription="@string/laugh_emoji"
+                android:src="@drawable/laughing"
+                tools:visibility="gone" />
+
+            <RelativeLayout
+                android:id="@+id/buttons_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:orientation="vertical">
+
+                    <androidx.appcompat.widget.AppCompatImageButton
+                        android:id="@+id/back_button"
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:layout_width="@dimen/default_button_size"
+                        android:layout_height="@dimen/default_button_size"
+                        android:background="@drawable/back_button"
+                        android:contentDescription="@string/back_button_description" />
+
+                    <TextView
+                        android:id="@+id/back_button_text"
+                        style="@style/buttonTextStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_small"
+                        android:text="@string/back_button_text" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:orientation="vertical">
+
+                    <androidx.appcompat.widget.AppCompatImageButton
+                        android:id="@+id/next_button"
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:layout_width="@dimen/default_button_size"
+                        android:layout_height="@dimen/default_button_size"
+                        android:background="@drawable/next_button"
+                        android:contentDescription="@string/next_button_description" />
+
+                    <TextView
+                        android:id="@+id/next_button_text"
+                        style="@style/buttonTextStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_small"
+                        android:text="@string/next_button_text" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+            </RelativeLayout>
+        </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
