@@ -1,6 +1,5 @@
 package com.levi.tellmeajokeapp.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
@@ -28,7 +27,7 @@ class JokeViewModel(private val jokeRepository: JokeRepository) : ViewModel() {
 
     private var joke: Joke? = null
     var punchlineAnimationFinished = false
-    private set
+        private set
 
     init {
         getJoke()

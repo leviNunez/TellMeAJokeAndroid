@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:paddingHorizontal="@dimen/spacing_large"
         android:clipToPadding="false"
-        tools:background="@color/blue_700"
+        tools:background="@color/blue_500"
         tools:showIn="@layout/fragment_joke">
 
         <TextView
