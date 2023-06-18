@@ -1,8 +1,6 @@
 package com.levi.tellmeajokeapp.model
 
-import com.levi.tellmeajokeapp.model.Joke
 import com.levi.tellmeajokeapp.model.network.Result
-import com.levi.tellmeajokeapp.model.JokeRepository
 
 class FakeJokeRepository(private val joke: Joke) : JokeRepository {
     var shouldReturnError = false

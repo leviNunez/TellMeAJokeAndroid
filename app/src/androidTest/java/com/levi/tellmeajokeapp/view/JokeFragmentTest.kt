@@ -14,7 +14,6 @@ import com.levi.tellmeajokeapp.model.FakeAppContainer
 import com.levi.tellmeajokeapp.model.Joke
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.*
-import org.hamcrest.CoreMatchers.not
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
