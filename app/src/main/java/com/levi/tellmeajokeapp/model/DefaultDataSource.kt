@@ -8,7 +8,7 @@ import com.levi.tellmeajokeapp.model.network.Result
 class DefaultDataSource(private val api: JokeApiService) : DataSource {
     override suspend fun getJoke(): Result<Joke> {
         return try {
-            val joke = api.getRandomJoke()
+            val joke = api.fetchJokes()
             Success(data = joke)
         } catch (e: Exception) {
             Error(e)

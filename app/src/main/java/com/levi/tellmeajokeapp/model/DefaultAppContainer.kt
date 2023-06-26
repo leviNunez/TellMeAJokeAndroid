@@ -7,7 +7,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 class DefaultAppContainer : AppContainer {
-    private val baseUrl = "https://official-joke-api.appspot.com"
+    private val baseUrl = "https://official-joke-api.appspot.com/jokes/"
 
     private val moshi = Moshi.Builder()
         .add(KotlinJsonAdapterFactory())
