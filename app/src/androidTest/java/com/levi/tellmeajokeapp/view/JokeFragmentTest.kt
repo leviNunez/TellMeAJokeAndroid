@@ -9,7 +9,7 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import com.levi.tellmeajokeapp.*
-import com.levi.tellmeajokeapp.model.FakeAndroidTestJokeRepository
+import com.levi.tellmeajokeapp.model.AndroidTestJokeRepository
 import com.levi.tellmeajokeapp.model.FakeAppContainer
 import com.levi.tellmeajokeapp.model.Joke
 import kotlinx.coroutines.*
@@ -37,15 +37,15 @@ internal class JokeFragmentTest {
     )
 
     @Before
-    fun setupRepository() {
-        val repository = FakeAndroidTestJokeRepository(listOf(joke1, joke2))
+    fun setup() {
+        val repository = AndroidTestJokeRepository(joke1, joke2)
         val container = FakeAppContainer(repository)
         ApplicationProvider.getApplicationContext<JokeApplication>().appContainer = container
     }
 
     @Test
     fun test_setupTextAndQuestionMarkButtonAreDisplayed() = runTest {
-        // Given
+        // When
         launchFragmentInContainer<JokeFragment>(themeResId = R.style.Theme_TellMeAJokeApp)
 
         // Then
@@ -103,10 +103,9 @@ internal class JokeFragmentTest {
     @Test
     fun test_errorState_errorLayoutDisplayed() = runTest {
         // Given
-        val repository =
-            FakeAndroidTestJokeRepository(shouldReturnError = true, jokeData = emptyList())
-        val container = FakeAppContainer(repository)
-        ApplicationProvider.getApplicationContext<JokeApplication>().appContainer = container
+        val newRepository = AndroidTestJokeRepository(joke1, shouldReturnError = true)
+        val newContainer = FakeAppContainer(newRepository)
+        ApplicationProvider.getApplicationContext<JokeApplication>().appContainer = newContainer
 
         // When
         launchFragmentInContainer<JokeFragment>(themeResId = R.style.Theme_TellMeAJokeApp)

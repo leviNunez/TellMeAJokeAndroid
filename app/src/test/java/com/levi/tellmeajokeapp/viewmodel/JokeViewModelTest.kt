@@ -1,12 +1,9 @@
 package com.levi.tellmeajokeapp.viewmodel
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
-import com.levi.tellmeajokeapp.MainCoroutineRule
-import com.levi.tellmeajokeapp.model.FakeJokeRepository
+import com.levi.tellmeajokeapp.MainDispatcherRule
 import com.levi.tellmeajokeapp.model.Joke
-import kotlinx.coroutines.*
-import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -22,14 +19,11 @@ internal class JokeViewModelTest {
         id = 180
     )
 
-    @get:Rule
-    var instantExecutorRule = InstantTaskExecutorRule()
-
-    @get:Rule
-    var mainCoroutineRule = MainCoroutineRule()
-
     private lateinit var viewModel: JokeViewModel
     private lateinit var repository: FakeJokeRepository
+
+    @get:Rule
+    var mainDispatcherRule = MainDispatcherRule()
 
     @Before
     fun setupRepository() {
@@ -44,7 +38,6 @@ internal class JokeViewModelTest {
 
         // When
         viewModel.getJoke()
-        advanceUntilIdle()
 
         // Then
         assertThat(viewModel.uiState.value).isEqualTo(UiState.ShowSetup(setup = joke.setup))
@@ -53,11 +46,10 @@ internal class JokeViewModelTest {
     @Test
     fun `getJoke on error sets uiState to Error`() = runTest {
         // Given
-        repository.setReturnError(value = true)
+        repository.setReturnError(true)
 
         // When
         viewModel.getJoke()
-        advanceUntilIdle()
 
         // Then
         assertThat(viewModel.uiState.value).isEqualTo(UiState.Error)
@@ -67,7 +59,6 @@ internal class JokeViewModelTest {
     fun `revealPunchline sets uiState to ShowPunchline`() = runTest {
         // Given
         viewModel.getJoke()
-        advanceUntilIdle()
 
         // When
         viewModel.revealPunchline()
@@ -80,10 +71,8 @@ internal class JokeViewModelTest {
     fun `revealSetup sets uiState back to ShowSetup`() = runTest {
         // Given
         viewModel.getJoke()
-        advanceUntilIdle()
         viewModel.revealPunchline()
-
-        // Assert that the state was set to ShowPunchline first
+        // Assert that the state was set to ShowPunchline
         assertThat(viewModel.uiState.value).isEqualTo(UiState.ShowPunchline(punchline = joke.punchline))
 
         // When

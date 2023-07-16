@@ -1,5 +1,7 @@
-package com.levi.tellmeajokeapp.model
+package com.levi.tellmeajokeapp.viewmodel
 
+import com.levi.tellmeajokeapp.model.Joke
+import com.levi.tellmeajokeapp.model.JokeRepository
 import com.levi.tellmeajokeapp.model.network.Result
 
 class FakeJokeRepository(private val joke: Joke) : JokeRepository {

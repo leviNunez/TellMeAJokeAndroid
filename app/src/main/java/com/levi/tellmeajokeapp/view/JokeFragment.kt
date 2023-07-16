@@ -1,20 +1,29 @@
 package com.levi.tellmeajokeapp.view
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.levi.tellmeajokeapp.databinding.FragmentJokeBinding
+import com.levi.tellmeajokeapp.utils.awaitEnd
+import com.levi.tellmeajokeapp.utils.fadeViewIn
+import com.levi.tellmeajokeapp.utils.fadeViewOut
+import com.levi.tellmeajokeapp.utils.moveAndRotateView
+import com.levi.tellmeajokeapp.utils.randomLaughImage
+import com.levi.tellmeajokeapp.utils.scaleDown
+import com.levi.tellmeajokeapp.utils.scaleUp
+import com.levi.tellmeajokeapp.utils.scaleViewUpAndDown
 import com.levi.tellmeajokeapp.viewmodel.JokeViewModel
 import com.levi.tellmeajokeapp.viewmodel.UiState
-import com.levi.tellmeajokeapp.utils.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class JokeFragment : Fragment() {
