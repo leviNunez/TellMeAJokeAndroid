@@ -1,26 +1,27 @@
 package com.levi.tellmeajokeapp.model
 
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.levi.tellmeajokeapp.model.network.JokeApiService
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+
 
 class DefaultAppContainer : AppContainer {
     private val baseUrl = "https://official-joke-api.appspot.com"
 
-    private val moshi = Moshi.Builder()
-        .add(KotlinJsonAdapterFactory())
-        .build()
-
-    private val api = Retrofit.Builder()
+    private val contentType = "application/json".toMediaType()
+    private val retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
-        .addConverterFactory(MoshiConverterFactory.create(moshi))
+        .addConverterFactory(Json.asConverterFactory(contentType))
         .build()
-        .create(JokeApiService::class.java)
 
-    private val defaultDataSource = DefaultDataSource(api = api)
+    private val service: JokeApiService by lazy {
+        retrofit.create(JokeApiService::class.java)
+    }
 
-    override val repository: JokeRepository
-        get() = DefaultJokeRepository(jokeRemoteDataSource = defaultDataSource)
+    override val repository: JokeRepository by lazy {
+        DefaultJokeRepository(jokeService = service)
+    }
+
 }

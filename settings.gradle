@@ -11,6 +11,15 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
     }
+    versionCatalogs {
+        libs {
+            library('retrofit', 'com.squareup.retrofit2:retrofit:2.9.0')
+            library('retrofit-kotlinserialization', 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0')
+            library('kotlin-serialization', 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0')
+            bundle('retrofit', ['retrofit', 'retrofit-kotlinserialization'])
+        }
+
+    }
 }
 rootProject.name = "TellMeAJokeApp"
 include ':app'

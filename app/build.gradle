@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.8.22'
 }
 
 android {
@@ -58,7 +59,8 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
     implementation 'androidx.navigation:navigation-fragment:2.5.3'
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
+
+
     implementation 'androidx.test.espresso:espresso-idling-resource:3.5.1'
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4"
     testImplementation 'junit:junit:4.13.2'
@@ -71,19 +73,9 @@ dependencies {
     implementation "androidx.core:core-splashscreen:1.0.0"
 
     // Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
-
-    // Moshi
-    implementation("com.squareup.moshi:moshi:1.14.0")
-    implementation("com.squareup.moshi:moshi-kotlin:1.13.0")
-
-    // Room
-    def room_version = "2.5.0"
-
-    implementation("androidx.room:room-runtime:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
-    implementation("androidx.room:room-ktx:$room_version")
+    implementation libs.bundles.retrofit
+    implementation libs.kotlin.serialization
+    implementation "com.squareup.okhttp3:okhttp:4.7.2"
 
     // Espresso
     androidTestImplementation('androidx.test.espresso:espresso-core:3.5.1')
@@ -91,14 +83,10 @@ dependencies {
     androidTestImplementation('androidx.test:runner:1.5.2')
     androidTestImplementation('androidx.test:rules:1.5.0')
 
-
     // AndroidX Test - Instrumented testing
     androidTestImplementation "androidx.arch.core:core-testing:2.2.0"
 
-    // Fragment test
-    def fragment_version = "1.5.5"
-
-    debugImplementation("androidx.fragment:fragment-testing:$fragment_version")
+    debugImplementation("androidx.fragment:fragment-testing:1.6.0")
 
     // InstantTaskExecutorRule
     testImplementation 'androidx.arch.core:core-testing:2.2.0'

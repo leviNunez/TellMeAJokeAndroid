@@ -18,8 +18,7 @@ internal class DefaultJokeRepositoryTest {
         punchline = "Thanks for all the sediment.",
         id = 180
     )
-
-    //subject under test
+z
     private lateinit var repository: DefaultJokeRepository
 
     @get:Rule
