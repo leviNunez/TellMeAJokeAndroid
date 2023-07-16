@@ -70,7 +70,9 @@ fun fadeViewOut(view: View): ObjectAnimator {
     }
 }
 
-/* An animation that makes a view grow and shrink repeatedly. */
+/**
+ An animation that makes a view grow and shrink repeatedly.
+ * */
 fun scaleViewUpAndDown(
     view: View,
     context: Context,
