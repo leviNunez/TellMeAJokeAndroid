@@ -1,6 +1,10 @@
 package com.levi.tellmeajokeapp.utils
 
-import android.animation.*
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
+import android.animation.PropertyValuesHolder
 import android.content.Context
 import android.content.res.Configuration.ORIENTATION_LANDSCAPE
 import android.view.View

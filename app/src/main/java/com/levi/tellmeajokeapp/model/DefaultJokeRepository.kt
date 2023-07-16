@@ -5,7 +5,6 @@ import com.levi.tellmeajokeapp.model.network.Result
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.lang.Exception
 
 class DefaultJokeRepository(
     private val jokeService: JokeApiService,

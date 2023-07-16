@@ -3,7 +3,7 @@ package com.levi.tellmeajokeapp.viewmodel
 import com.google.common.truth.Truth.assertThat
 import com.levi.tellmeajokeapp.MainDispatcherRule
 import com.levi.tellmeajokeapp.model.Joke
-import kotlinx.coroutines.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule

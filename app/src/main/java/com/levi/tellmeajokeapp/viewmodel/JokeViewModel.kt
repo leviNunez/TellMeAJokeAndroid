@@ -8,10 +8,10 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import com.levi.tellmeajokeapp.JokeApplication
 import com.levi.tellmeajokeapp.model.Joke
 import com.levi.tellmeajokeapp.model.JokeRepository
-import kotlinx.coroutines.launch
-import com.levi.tellmeajokeapp.model.network.Result.Success
 import com.levi.tellmeajokeapp.model.network.Result.Error
+import com.levi.tellmeajokeapp.model.network.Result.Success
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 sealed interface UiState {
     object Loading : UiState

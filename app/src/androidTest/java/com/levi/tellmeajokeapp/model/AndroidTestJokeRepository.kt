@@ -2,7 +2,7 @@ package com.levi.tellmeajokeapp.model
 
 import com.levi.tellmeajokeapp.model.network.Result
 
-class androidTestJokeRepository(
+class AndroidTestJokeRepository(
     vararg jokes: Joke,
     private val shouldReturnError: Boolean = false
 ) : JokeRepository {

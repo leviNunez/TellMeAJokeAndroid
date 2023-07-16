@@ -9,7 +9,7 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import com.levi.tellmeajokeapp.*
-import com.levi.tellmeajokeapp.model.androidTestJokeRepository
+import com.levi.tellmeajokeapp.model.AndroidTestJokeRepository
 import com.levi.tellmeajokeapp.model.FakeAppContainer
 import com.levi.tellmeajokeapp.model.Joke
 import kotlinx.coroutines.*
@@ -38,7 +38,7 @@ internal class JokeFragmentTest {
 
     @Before
     fun setup() {
-        val repository = androidTestJokeRepository(joke1, joke2)
+        val repository = AndroidTestJokeRepository(joke1, joke2)
         val container = FakeAppContainer(repository)
         ApplicationProvider.getApplicationContext<JokeApplication>().appContainer = container
     }
@@ -103,7 +103,7 @@ internal class JokeFragmentTest {
     @Test
     fun test_errorState_errorLayoutDisplayed() = runTest {
         // Given
-        val newRepository = androidTestJokeRepository(joke1, shouldReturnError = true)
+        val newRepository = AndroidTestJokeRepository(joke1, shouldReturnError = true)
         val newContainer = FakeAppContainer(newRepository)
         ApplicationProvider.getApplicationContext<JokeApplication>().appContainer = newContainer
 
